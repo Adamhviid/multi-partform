@@ -1,29 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      /* Center the form on the screen */
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      label {
+        padding-top: 20px;
+      }
+
+      /* Add spacing between form inputs */
+      input,
+      select,
+      button {
+        margin-bottom: 10px;
+      }
+    </style>
     <title>Forms</title>
-</head>
-<body>
-    <h2>Multipart/form-data</h2>
+  </head>
+  <body>
+    <form
+      action="http://localhost:8000/form"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <h2>Multipart/form-data</h2>
+      <h3>Job application</h3>
+      <label for="name">Name</label>
+      <input name="name" placeholder="name" />
 
-    <h4>Basic Form</h4>
-    <form action="http://127.0.0.1:8000/form" method="POST">
-        <input name="username" placeholder="username">
-        <input name="password" type="password" placeholder="password">
+      <label for="email">Email</label>
+      <input name="email" placeholder="email" />
 
-        <button>Submit</button>
+      <label for="image">Image</label>
+      <input name="image" type="file" accept="image/*" />
+
+      <label for="cv">CV (only pdf)</label>
+      <input name="cv" type="file" accept="application/pdf" />
+
+      <label for="country">Country</label>
+      <select name="country">
+        <option value="denmark">Denmark</option>
+        <option value="sweden">Sweden</option>
+        <option value="norway">Norway</option>
+      </select>
+      <button>Submit</button>
     </form>
-    
-    <br><br><br><br>
-    
-    <h4>File Form</h4>
-    <form action="http://127.0.0.1:8000/fileform" method="POST" enctype="multipart/form-data">
-        <input name="file" type="file" accept="image/*">
-        <input name="description" placeholder="short description">
-
-        <button>Submit</button>
-    </form>
-</body>
+  </body>
 </html>

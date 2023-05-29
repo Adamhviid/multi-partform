@@ -2,7 +2,6 @@ import express from "express";
 import multer from "multer";
 
 const app = express();
-
 app.use(express.urlencoded({ extended: true }));
 
 const storage = multer.diskStorage({
@@ -19,24 +18,31 @@ const storage = multer.diskStorage({
     const originalFilename = filenameParts.join(".");
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
 
-    const newFileName = uniqueSuffix + "___" + originalFilename + "." + extension;
+    let newFileName = "";
 
+    if (file.fieldname === "cv") {
+      newFileName = req.body.name + "-CV-" + uniqueSuffix + "." + extension;
+    } else if (file.fieldname === "image") {
+      newFileName = req.body.name + "-Image-" + uniqueSuffix + "." + extension;
+    } else {
+      newFileName = req.body.name + "-" + uniqueSuffix + "-" + originalFilename + "." + extension;
+    }
     cb(null, newFileName);
   }
 });
+
 const upload = multer({ storage });
 
+app.post("/form", upload.fields([{ name: "image" }, { name: "cv" }]), (req, res) => {
+  const { name, email, country } = req.body;
+  const imageFile = req.files["image"][0];
+  const cvFile = req.files["cv"][0];
 
-app.post("/form", (req, res) => {
-  console.log(req.body);
-  delete req.body.password;
-  res.send({ data: req.body });
+  console.log({ name: name, email: email, country: country });
+  console.log({ imageFile: imageFile, cvFile: cvFile });
+
+  res.send({ data: req.body, files: req.files });
 });
 
-app.post("/fileform", upload.single("file"), (req, res) => {
-  console.log(req.file);
-  res.send({ data: req.body })
-});
-
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log("Server is running in port", PORT));
+const PORT = 8000;
+app.listen(8000, () => console.log("Server is running on port", PORT));
